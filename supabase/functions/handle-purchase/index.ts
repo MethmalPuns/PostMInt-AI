@@ -1,6 +1,5 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-//import { verifySignature } from 'https://esm.sh/@lemonsqueezy/lemonsqueezy@1.0.0'
 
 const lemonSqueezySecret = Deno.env.get('LEMON_SQUEEZY_SECRET') || '';
 
@@ -44,8 +43,8 @@ serve(async (req) => {
 
     // Create Supabase client
     const supabaseClient = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? ''
+      Deno.env.get('APP_SUPABASE_URL') ?? '',
+      Deno.env.get('APP_SUPABASE_KEY') ?? ''
     )
 
     // Process based on addon type
@@ -69,13 +68,6 @@ serve(async (req) => {
   if (rpcError) throw rpcError
 }
 
-    /*// Update user quota
-    const { error: updateError } = await supabaseClient
-      .from('user_quotas')
-      .update(updates)
-      .eq('user_id', customData.user_id)
-
-    if (updateError) throw updateError*/
 
     // Record purchase
     await supabaseClient
