@@ -657,8 +657,10 @@
      import { createClient } from 'https://esm.sh/@supabase/supabase-js'
 
   
-const supabaseUrl = 'https://naqxuadoqbhnaiushqjo.supabase.co';
-  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hcXh1YWRvcWJobmFpdXNocWpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMwOTUyMjQsImV4cCI6MjA2ODY3MTIyNH0.yyvMDcVnh9UogaR2qb5HP19MriPaXP8tG7ns8c_fQ-A';
+const supabaseUrl = process.env.SUPABASE_URL;
+
+  const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
+
   const supabase = createClient(supabaseUrl, supabaseKey);
         
   // DOM Elements
