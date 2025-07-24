@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PostMint AI | AI-Powered X Platform Post Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <!--<script src="https://unpkg.com/@supabase/supabase-js@2"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/dist/umd/supabase.min.js"></script>
+
+
+<!--<script src="https://js.lemonsqueezy.com/v1/lemon.js" defer></script>-->
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Megrim&display=swap');
+        
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #f59e0b;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+        }
+        
+        .post-card {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        .post-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .copy-btn {
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        
+        .post-card:hover .copy-btn {
+            opacity: 1;
+        }
+        
+        .character-count {
+            transition: color 0.2s ease;
+        }
+        
+        .loading-spinner {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /*bar animation*/
+        @keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
+        /*logo styles*/
+
+
+.logo {
+  font-family: 'Megrim', cursive;
+  font-size: 2.5rem;
+  color: #2d18ed;
+  text-shadow: 1px 1px 0 #a7eb0a, -1px -1px 0 #4562b3;
+  animation: glitchSkew 1.5s infinite alternate;
+  letter-spacing: 3.5px;
+}
+
+@keyframes glitchSkew {
+  0% { transform: skew(-1deg); }
+  100% { transform: skew(1deg); }
+}
+
+    </style>
+    
+</head>
+
+<body class="gradient-bg">
+    
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="logo">PostMint AI</div>
+         
+            </div>
+<p class="text-base md:text-lg font-semibold text-gray-700 tracking-wide animate-fade-in-up">
+  AI-powered marketing posts for X platform
+</p>
+            <div id="auth-buttons" class="flex space-x-2">
+                <button id="sign-in-btn" class="px-4 py-2 text-sm font-medium text-indigo-600 hover:text-indigo-800">Sign In</button>
+                <button id="sign-up-btn" class="px-4 py-2 text-sm font-medium bg-indigo-600 text-white rounded-md hover:bg-indigo-700">Sign Up</button>
+            </div>
+            <div id="user-menu" class="hidden items-center space-x-4">
+                <span id="user-email" class="text-sm font-medium text-gray-700"></span>
+                <button id="sign-out-btn" class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800">Sign Out</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="py-16 px-4">
+        <div class="container mx-auto max-w-4xl text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 animate__animated animate__fadeIn">
+                Craft Perfect X Platform Posts with AI
+            </h1>
+            <p class="text-xl text-gray-600 mb-10 max-w-3xl mx-auto">
+                Generate engaging, on-brand marketing posts for your business in seconds. Just describe what you do and let our AI do the rest.
+            </p>
+            <div class="flex justify-center space-x-4">
+                <a href="#generator" class="px-6 py-3 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 transition-colors">
+                    Try It Free
+                </a>
+                <a href="#pricing" class="px-6 py-3 border border-indigo-600 text-indigo-600 font-medium rounded-md hover:bg-indigo-50 transition-colors">
+                    View Plans
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-12 px-4 bg-white">
+        <div class="container mx-auto max-w-4xl">
+            <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">How PostMint AI Works</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-md bg-indigo-100 text-indigo-600 mb-4">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">Describe Your Business</h3>
+                    <p class="text-gray-600">Provide details about your brand, product, or service in simple terms.</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-md bg-indigo-100 text-indigo-600 mb-4">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">Customize Your Preferences</h3>
+                    <p class="text-gray-600">Select tone, target audience, and number of posts you need.</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-md bg-indigo-100 text-indigo-600 mb-4">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">Get AI-Generated Posts</h3>
+                    <p class="text-gray-600">Receive optimized, engaging posts ready to share on X platform.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <!-- Generator Section -->
+    <section id="generator" class="py-12 px-4">
+       <div class="relative" id="generator-wrapper">
+           
+        <!-- Generator Form -->
+       <div id="generator-content">
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="p-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Generate Your Posts</h2>
+                    <div id="free-tier-info" class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <svg class="h-5 w-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-blue-700">
+                                    <span id="remaining-posts">5</span> free posts remaining this month. <span id="remaining-submits">1</span> submit chance left.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form id="post-form" class="space-y-6">
+                        <div>
+                            <label for="business-description" class="block text-sm font-medium text-gray-700 mb-1">
+                                Business/Brand Description
+                            </label>
+                            <textarea 
+                                id="business-description" 
+                                rows="10" 
+                                maxlength="600"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                                placeholder="Describe your business, product, or service in detail (max 600 characters)"></textarea>
+                            <div class="flex justify-between mt-1">
+                                <p class="text-xs text-gray-500">Be specific for better results</p>
+                                <p class="text-xs text-gray-500"><span id="char-count">0</span>/600 characters</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label for="post-count" class="block text-sm font-medium text-gray-700 mb-1">
+                                    Number of Posts
+                                </label>
+                                <select id="post-count" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                    <option value="1">1 post</option>
+                                    <option value="3">3 posts</option>
+                                    <option value="5">5 posts</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label for="tone" class="block text-sm font-medium text-gray-700 mb-1">
+                                    Tone
+                                </label>
+                                <select id="tone" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                    <option value="professional">Professional</option>
+                                    <option value="casual">Casual</option>
+                                    <option value="enthusiastic">Enthusiastic</option>
+                                    <option value="humorous">Humorous</option>
+                                    <option value="informative">Informative</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label for="audience" class="block text-sm font-medium text-gray-700 mb-1">
+                                    Target Audience
+                                </label>
+                                <select id="audience" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                    <option value="general">General Public</option>
+                                    <option value="business">Business Professionals</option>
+                                    <option value="tech">Tech Enthusiasts</option>
+                                    <option value="young">Young Adults</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <button type="submit" id="generate-btn" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                Generate Posts
+                            </button>
+                            <button id="loading-btn" class="hidden w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-400">
+                                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white loading-spinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Generating...
+                            </button>
+                        </div>
+                    </form>
+                </div>
+               <!-- Overlay (locked state) -->
+  <div id="lock-overlay" class="absolute inset-0 bg-white bg-opacity-80 z-20 flex flex-col justify-center items-center text-center p-8 hidden">
+    <h2 class="text-xl font-semibold mb-4">Login Required</h2>
+    <p class="text-gray-900 mb-1 ">Please sign in to generate posts with AI.</p>
+    <p class="text-gray-500 mb-8">(It's Completely Free.No Credit Card Needed.)</p>
+    
+  </div>
+    </div>
+    </div>
+                <!-- Results Section -->
+                <div id="results-section" class="hidden border-t border-gray-200 p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-medium text-gray-900">Your Generated Posts</h3>
+                        <div class="text-sm text-gray-500">
+                            <span id="shown-posts-count">0</span> of <span id="total-posts-count">0</span> shown
+                        </div>
+                    </div>
+                    
+                    <div id="posts-container" class="grid grid-cols-1 gap-4">
+                        <!-- Posts will be inserted here -->
+                    </div>
+                    
+                    <div id="more-posts-section" class="mt-6 hidden">
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm text-yellow-700">
+                                        You've used all your free posts. To see more, purchase an addon package below.
+                                    </p>
+                                    <div class="mt-2">
+                                        <a href="#pricing" class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded shadow-sm text-yellow-700 bg-yellow-100 hover:bg-yellow-200">
+                                            View Addons
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-12 px-4">
+        <div class="container mx-auto max-w-4xl">
+            <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Simple, Transparent Pricing</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Free Tier -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="px-6 py-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-2xl font-bold text-gray-900">Free Tier</h3>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
+                                Always Free
+                            </span>
+                        </div>
+                        <p class="text-gray-600 mb-6">Perfect for trying out PostMint AI</p>
+                        <div class="mb-6">
+                            <span class="text-4xl font-bold text-gray-900">$0</span>
+                            <span class="text-gray-600">/month</span>
+                        </div>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span>5 posts per month</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span>1 submit chance</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span>All tone options</span>
+                            </li>
+                        </ul>
+                        <button class="w-full px-6 py-3 border border-indigo-600 text-indigo-600 font-medium rounded-md hover:bg-indigo-50 transition-colors">
+                            Current Plan
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Addon Packages -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="px-6 py-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-2xl font-bold text-gray-900">Addon Packages</h3>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
+                                Flexible Options
+                            </span>
+                        </div>
+                        <p class="text-gray-600 mb-6">Boost your post generation capacity</p>
+                        
+                        <!-- Addon 1 -->
+                        <div class="mb-6 p-4 border border-gray-200 rounded-lg">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="text-lg font-medium text-gray-900">More Posts</h4>
+                                <span class="text-lg font-bold text-gray-900">$5</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">Get 10 additional posts from your existing generated content</p>
+                            <ul class="text-sm text-gray-600 space-y-1 mb-4">
+                                <li class="flex items-start">
+                                    <svg class="h-4 w-4 text-green-500 mr-1 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span>Access 10 more posts from your stored results</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="h-4 w-4 text-green-500 mr-1 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span>No additional API calls needed</span>
+                                </li>
+                            </ul>
+                            <button id="addon-1-btn" class="w-full px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 transition-colors">
+                                Purchase Addon
+                            </button>
+                            <p class="text-xs text-gray-500 mt-1">Max 3 purchases per user (30 posts total)</p>
+                        </div>
+                        
+                        <!-- Addon 2 -->
+                        <div class="p-4 border border-gray-200 rounded-lg">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="text-lg font-medium text-gray-900">New Input + Posts</h4>
+                                <span class="text-lg font-bold text-gray-900">$5</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">Submit a new business description and get 5 fresh posts</p>
+                            <ul class="text-sm text-gray-600 space-y-1 mb-4">
+                                <li class="flex items-start">
+                                    <svg class="h-4 w-4 text-green-500 mr-1 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span>1 additional submit chance</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="h-4 w-4 text-green-500 mr-1 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span>5 new AI-generated posts</span>
+                                </li>
+                            </ul>
+                            <button id="addon-2-btn" class="w-full px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 transition-colors">
+                                Purchase Addon
+                            </button>
+                            <p id="api-limit-warning" class="hidden text-xs text-red-500 mt-1">Temporarily unavailable due to API limits. Check back later.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Backstory Section -->
+    <section class="py-12 px-4 bg-white">
+        <div class="container mx-auto max-w-4xl">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Our Story</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Why we built PostMint AI and how it can transform your social media presence
+                </p>
+            </div>
+            
+            <div class="prose prose-indigo max-w-none">
+                <p>
+                    As digital marketers ourselves, we struggled to consistently create engaging, on-brand content for our clients. The creative process was time-consuming, and maintaining a steady stream of quality posts was challenging.
+                </p>
+                <p>
+                    That's when we realized the potential of AI to revolutionize content creation. We built PostMint AI to help businesses like yours maintain an active, professional presence on X platform without the hassle of constant content creation.
+                </p>
+                <p>
+                    Our AI is trained on thousands of successful marketing posts across various industries, ensuring that your generated content follows proven engagement patterns while staying true to your unique brand voice.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-12 px-4">
+        <div class="container mx-auto max-w-4xl">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">What Our Users Say</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Don't just take our word for it - hear from businesses using PostMint AI
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold mr-3">
+                            S
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-900">Sarah J.</h4>
+                            <p class="text-sm text-gray-600">E-commerce Owner</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">
+                        "PostMint AI has saved me hours each week. The posts are so well-crafted that my engagement has increased by 40% since I started using them."
+                    </p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold mr-3">
+                            M
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-900">Michael T.</h4>
+                            <p class="text-sm text-gray-600">SaaS Founder</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">
+                        "As a solo founder, maintaining social media was overwhelming. Now I get professional-quality posts in minutes. The AI really understands my tech audience."
+                    </p>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <button id="add-testimonial-btn" class="px-6 py-3 border border-indigo-600 text-indigo-600 font-medium rounded-md hover:bg-indigo-50 transition-colors">
+                    Share Your Experience
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonial Form Modal -->
+    <div id="testimonial-modal" class="fixed z-50 inset-0 overflow-y-auto hidden">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Share Your Experience</h3>
+                    <form id="testimonial-form" class="space-y-4">
+                        <div>
+                            <label for="testimonial-name" class="block text-sm font-medium text-gray-700">Your Name</label>
+                            <input type="text" id="testimonial-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label for="testimonial-role" class="block text-sm font-medium text-gray-700">Your Role/Title</label>
+                            <input type="text" id="testimonial-role" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label for="testimonial-text" class="block text-sm font-medium text-gray-700">Your Testimonial</label>
+                            <textarea id="testimonial-text" rows="4" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" id="submit-testimonial-btn" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">
+                        Submit
+                    </button>
+                    <button type="button" id="cancel-testimonial-btn" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="fixed z-50 inset-0 overflow-y-auto hidden">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-6" id="auth-modal-title">Sign In</h3>
+                            <div class="mt-2">
+                                <form id="auth-form" class="space-y-6">
+                                    <div id="auth-error" class="hidden bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+                                        <div class="flex">
+                                            <div class="flex-shrink-0">
+                                                <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                                                </svg>
+                                            </div>
+                                            <div class="ml-3">
+                                                <p class="text-sm text-red-700" id="auth-error-message"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <label for="auth-email" class="block text-sm font-medium text-gray-700">Email</label>
+                                        <input type="email" id="auth-email" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                    </div>
+                                    
+                                    <div>
+                                        <label for="auth-password" class="block text-sm font-medium text-gray-700">Password</label>
+                                        <input type="password" id="auth-password" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                    </div>
+                                    
+                                    <div id="auth-confirm-password-container" class="hidden">
+                                        <label for="auth-confirm-password" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                                        <input type="password" id="auth-confirm-password" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                                            <label for="remember-me" class="ml-2 block text-sm text-gray-900">Remember me</label>
+                                        </div>
+                                        
+                                        <div class="text-sm">
+                                            <a href="#" id="auth-toggle-link" class="font-medium text-indigo-600 hover:text-indigo-500"></a>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <button type="submit" id="auth-submit-btn" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                            Sign In
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" id="auth-close-btn" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 py-8 px-4">
+        <div class="container mx-auto max-w-4xl">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center space-x-2 mb-4 md:mb-0">
+                    <div class="flex items-center space-x-2">
+                <div class="logo">PostMint AI</div>
+         
+            </div>
+                    <span class="text-lg font-bold text-gray-800"></span>
+                </div>
+                
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-600 hover:text-gray-900">Terms</a>
+                    <a href="#" class="text-gray-600 hover:text-gray-900">Privacy</a>
+                    <a href="#" class="text-gray-600 hover:text-gray-900">Contact</a>
+                </div>
+            </div>
+            
+            <div class="mt-8 pt-8 border-t border-gray-200 text-center text-sm text-gray-500">
+                <p>© 2025 PostMint AI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+<script type="module">
+     import { createClient } from 'https://esm.sh/@supabase/supabase-js'
+
+  
+const supabaseUrl = 'https://naqxuadoqbhnaiushqjo.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hcXh1YWRvcWJobmFpdXNocWpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMwOTUyMjQsImV4cCI6MjA2ODY3MTIyNH0.yyvMDcVnh9UogaR2qb5HP19MriPaXP8tG7ns8c_fQ-A';
+  const supabase = createClient(supabaseUrl, supabaseKey);
+        
+  // DOM Elements
+        const authButtons = document.getElementById('auth-buttons');
+        const userMenu = document.getElementById('user-menu');
+        const userEmail = document.getElementById('user-email');
+        const signInBtn = document.getElementById('sign-in-btn');
+        const signUpBtn = document.getElementById('sign-up-btn');
+        const signOutBtn = document.getElementById('sign-out-btn');
+        const authModal = document.getElementById('auth-modal');
+        const authModalTitle = document.getElementById('auth-modal-title');
+        const authForm = document.getElementById('auth-form');
+        const authSubmitBtn = document.getElementById('auth-submit-btn');
+        const authToggleLink = document.getElementById('auth-toggle-link');
+        const authCloseBtn = document.getElementById('auth-close-btn');
+        const authEmail = document.getElementById('auth-email');
+        const authPassword = document.getElementById('auth-password');
+        const authConfirmPasswordContainer = document.getElementById('auth-confirm-password-container');
+        const authConfirmPassword = document.getElementById('auth-confirm-password');
+        const authError = document.getElementById('auth-error');
+        const authErrorMessage = document.getElementById('auth-error-message');
+        
+        const postForm = document.getElementById('post-form');
+        const businessDescription = document.getElementById('business-description');
+        const postCount = document.getElementById('post-count');
+        const tone = document.getElementById('tone');
+        const audience = document.getElementById('audience');
+        const generateBtn = document.getElementById('generate-btn');
+        const loadingBtn = document.getElementById('loading-btn');
+        const resultsSection = document.getElementById('results-section');
+        const postsContainer = document.getElementById('posts-container');
+        const morePostsSection = document.getElementById('more-posts-section');
+        const shownPostsCount = document.getElementById('shown-posts-count');
+        const totalPostsCount = document.getElementById('total-posts-count');
+        const remainingPosts = document.getElementById('remaining-posts');
+        const remainingSubmits = document.getElementById('remaining-submits');
+        const charCount = document.getElementById('char-count');
+        
+        const addon1Btn = document.getElementById('addon-1-btn');
+        const addon2Btn = document.getElementById('addon-2-btn');
+        const apiLimitWarning = document.getElementById('api-limit-warning');
+        
+        const testimonialModal = document.getElementById('testimonial-modal');
+        const addTestimonialBtn = document.getElementById('add-testimonial-btn');
+        const cancelTestimonialBtn = document.getElementById('cancel-testimonial-btn');
+        const submitTestimonialBtn = document.getElementById('submit-testimonial-btn');
+        const testimonialForm = document.getElementById('testimonial-form');
+        
+        // State
+        let isSignUp = false;
+        let currentUser = null;
+        let userQuota = {
+            remainingPosts: 5,
+            remainingSubmits: 1,
+            purchasedPosts: 0,
+            purchasedSubmits: 0,
+            cachedPosts: [],
+            apiCallsToday: 0
+        };
+        
+        // Character count
+        businessDescription.addEventListener('input', () => {
+            charCount.textContent = businessDescription.value.length;
+            
+            if (businessDescription.value.length > 550) {
+                charCount.classList.add('text-yellow-600');
+            } else {
+                charCount.classList.remove('text-yellow-600');
+            }
+            
+            if (businessDescription.value.length >= 600) {
+                charCount.classList.add('text-red-600');
+            } else {
+                charCount.classList.remove('text-red-600');
+            }
+        });
+        
+        // Auth toggle
+        authToggleLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            isSignUp = !isSignUp;
+            toggleAuthMode();
+        });
+        
+        function toggleAuthMode() {
+            if (isSignUp) {
+                authModalTitle.textContent = 'Sign Up';
+                authSubmitBtn.textContent = 'Sign Up';
+                authToggleLink.textContent = 'Already have an account? Sign In';
+                authConfirmPasswordContainer.classList.remove('hidden');
+            } else {
+                authModalTitle.textContent = 'Sign In';
+                authSubmitBtn.textContent = 'Sign In';
+                authToggleLink.textContent = "Don't have an account? Sign Up";
+                authConfirmPasswordContainer.classList.add('hidden');
+            }
+            
+            authError.classList.add('hidden');
+        }
+        
+        // Auth modal
+        signInBtn.addEventListener('click', () => {
+            isSignUp = false;
+            toggleAuthMode();
+            authModal.classList.remove('hidden');
+        });
+        
+        signUpBtn.addEventListener('click', () => {
+            isSignUp = true;
+            toggleAuthMode();
+            authModal.classList.remove('hidden');
+        });
+        
+        authCloseBtn.addEventListener('click', () => {
+            authModal.classList.add('hidden');
+        });
+        
+        // Auth form submission
+        authForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = authEmail.value;
+            const password = authPassword.value;
+            const confirmPassword = authConfirmPassword.value;
+            
+            authError.classList.add('hidden');
+            
+            if (isSignUp) {
+                if (password !== confirmPassword) {
+                    showAuthError('Passwords do not match');
+                    return;
+                }
+                
+                if (password.length < 6) {
+                    showAuthError('Password must be at least 6 characters');
+                    return;
+                }
+                
+                try {
+                    const { data, error } = await supabase.auth.signUp({
+                        email,
+                        password
+                    });
+
+                    if (error) throw error;
+                    if (!data || !data.user) throw new Error('User signup failed');
+                      const user = data.user;
+ 
+                    
+                    // Initialize user quota in database
+                    const {  error: quotaError } = await supabase
+                        .from('user_quotas')
+                        .insert([
+                            { 
+                                user_id: user.id, 
+                                remaining_posts: 5, 
+                                remaining_submits: 1,
+                                purchased_posts: 0,
+                                purchased_submits: 0,
+                                cached_posts: [],
+                                api_calls_today: 0,
+                                last_api_call_date: new Date().toISOString().split('T')[0]
+                            }
+                        ]);
+                    
+                    if (quotaError) throw quotaError;
+                    
+                    alert('Sign up successful! Please check your email for confirmation.');
+                    authModal.classList.add('hidden');
+                } catch (error) {
+                    showAuthError(error.message);
+                }
+            } else {
+                try {
+                    const { data, error } = await supabase.auth.signInWithPassword({
+                        email,
+                        password
+                    });
+                    
+                    if (error) throw error;
+                    
+                    currentUser = user;
+                    await loadUserQuota();
+                    updateUIAfterAuth();
+                    authModal.classList.add('hidden');
+                } catch (error) {
+                    showAuthError(error.message);
+                }
+            }
+        });
+        
+        // Sign out
+        signOutBtn.addEventListener('click', async () => {
+            try {
+                const { error } = await supabase.auth.signOut();
+                if (error) throw error;
+                
+                currentUser = null;
+                userQuota = {
+                    remainingPosts: 5,
+                    remainingSubmits: 1,
+                    purchasedPosts: 0,
+                    purchasedSubmits: 0,
+                    cachedPosts: [],
+                    apiCallsToday: 0
+                };
+                
+                updateUIAfterAuth();
+            } catch (error) {
+                console.error('Error signing out:', error.message);
+            }
+        });
+        
+        function showAuthError(message) {
+            authErrorMessage.textContent = message;
+            authError.classList.remove('hidden');
+        }
+        
+        // Check auth state on load
+        async function checkAuthState() {
+            const { user, error } = await supabase.auth.getUser();
+            
+            if (user) {
+                currentUser = user;
+                await loadUserQuota();
+                updateUIAfterAuth();
+            }
+        }
+        
+        async function loadUserQuota() {
+            try {
+                // Check if we need to reset daily API calls
+                const today = new Date().toISOString().split('T')[0];
+                
+                const { data: quotaData, error: quotaError } = await supabase
+                    .from('user_quotas')
+                    .select('*')
+                    .eq('user_id', currentUser.id)
+                    .single();
+                
+                if (quotaError) throw quotaError;
+                
+                // Reset API calls if it's a new day
+                if (quotaData.last_api_call_date !== today) {
+                    const { data: updateData, error: updateError } = await supabase
+                        .from('user_quotas')
+                        .update({ 
+                            api_calls_today: 0,
+                            last_api_call_date: today 
+                        })
+                        .eq('user_id', currentUser.id);
+                    
+                    if (updateError) throw updateError;
+                    
+                    quotaData.api_calls_today = 0;
+                }
+                
+                userQuota = {
+                    remainingPosts: quotaData.remaining_posts,
+                    remainingSubmits: quotaData.remaining_submits,
+                    purchasedPosts: quotaData.purchased_posts,
+                    purchasedSubmits: quotaData.purchased_submits,
+                    cachedPosts: quotaData.cached_posts || [],
+                    apiCallsToday: quotaData.api_calls_today
+                };
+                
+                updateQuotaUI();
+                
+                // Check if we're close to API limit (100 calls/day)
+                if (userQuota.apiCallsToday >= 90) {
+                    apiLimitWarning.classList.remove('hidden');
+                    addon2Btn.disabled = true;
+                } else {
+                    apiLimitWarning.classList.add('hidden');
+                    addon2Btn.disabled = false;
+                }
+            } catch (error) {
+                console.error('Error loading user quota:', error.message);
+            }
+        }
+        
+        function updateUIAfterAuth() {
+            if (currentUser) {
+                authButtons.classList.add('hidden');
+                userMenu.classList.remove('hidden');
+                userEmail.textContent = currentUser.email;
+            } else {
+                authButtons.classList.remove('hidden');
+                userMenu.classList.add('hidden');
+            }
+            
+            updateQuotaUI();
+        }
+        
+        function updateQuotaUI() {
+            if (currentUser) {
+                remainingPosts.textContent = userQuota.remainingPosts + (userQuota.purchasedPosts > 0 ? ` + ${userQuota.purchasedPosts} (addon)` : '');
+                remainingSubmits.textContent = userQuota.remainingSubmits + (userQuota.purchasedSubmits > 0 ? ` + ${userQuota.purchasedSubmits} (addon)` : '');
+            } else {
+                remainingPosts.textContent = '5';
+                remainingSubmits.textContent = '1';
+            }
+        }
+        
+        // Post form submission
+        postForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!currentUser) {
+                alert('Please sign in to generate posts');
+                authModal.classList.remove('hidden');
+                return;
+            }
+            
+            const description = businessDescription.value.trim();
+            const count = parseInt(postCount.value);
+            const selectedTone = tone.value;
+            const selectedAudience = audience.value;
+            
+            if (!description) {
+                alert('Please enter a business description');
+                return;
+            }
+            
+            if (description.length > 600) {
+                alert('Description must be 600 characters or less');
+                return;
+            }
+            
+            // Check if user has submit chances left
+            const totalSubmits = userQuota.remainingSubmits + userQuota.purchasedSubmits;
+            if (totalSubmits <= 0) {
+                alert('No submit chances left. Please purchase an addon to get more.');
+                return;
+            }
+            
+            // Check if user has enough posts left
+            const totalPosts = userQuota.remainingPosts + userQuota.purchasedPosts;
+            if (count > totalPosts) {
+                alert(`You only have ${totalPosts} posts remaining. Please reduce the number of posts or purchase an addon.`);
+                return;
+            }
+            
+            // Check if we have cached posts that can fulfill this request
+            if (userQuota.cachedPosts.length >= count) {
+                showCachedPosts(count);
+                return;
+            }
+            
+            // Otherwise, call the API
+            try {
+                generateBtn.classList.add('hidden');
+                loadingBtn.classList.remove('hidden');
+                
+                // First check if we can make an API call today
+                if (userQuota.apiCallsToday >= 100) {
+                    throw new Error('Daily API limit reached. Please try again tomorrow.');
+                }
+                
+                // Call our edge function to generate posts
+                const { data, error } = await supabase.functions.invoke('generate-posts', {
+                    body: {
+                        description,
+                        tone: selectedTone,
+                        audience: selectedAudience
+                    }
+                });
+                
+                if (error) throw error;
+                
+                // The API returns 35 posts at once
+                const generatedPosts = data.posts;
+                
+                // Update user quota in database
+                const newApiCalls = userQuota.apiCallsToday + 1;
+                const newRemainingSubmits = userQuota.remainingSubmits - 1;
+                const newCachedPosts = [...userQuota.cachedPosts, ...generatedPosts];
+                
+                const { error: updateError } = await supabase
+                    .from('user_quotas')
+                    .update({ 
+                        remaining_submits: newRemainingSubmits,
+                        api_calls_today: newApiCalls,
+                        cached_posts: newCachedPosts
+                    })
+                    .eq('user_id', currentUser.id);
+                
+                if (updateError) throw updateError;
+                
+                // Update local state
+                userQuota.remainingSubmits = newRemainingSubmits;
+                userQuota.apiCallsToday = newApiCalls;
+                userQuota.cachedPosts = newCachedPosts;
+                
+                updateQuotaUI();
+                
+                // Show the posts to the user
+                showCachedPosts(count);
+            } catch (error) {
+                console.error('Error generating posts:', error.message);
+                alert(`Error: ${error.message}`);
+            } finally {
+                generateBtn.classList.remove('hidden');
+                loadingBtn.classList.add('hidden');
+            }
+        });
+        
+        function showCachedPosts(count) {
+            // Determine how many posts we can show based on remaining quota
+            const totalAvailablePosts = userQuota.remainingPosts + userQuota.purchasedPosts;
+            const postsToShow = Math.min(count, totalAvailablePosts, userQuota.cachedPosts.length);
+            
+            // Slice the cached posts
+            const posts = userQuota.cachedPosts.slice(0, postsToShow);
+            
+            // Clear previous posts
+            postsContainer.innerHTML = '';
+            
+            // Add new posts
+            posts.forEach((post, index) => {
+                const postElement = document.createElement('div');
+                postElement.className = 'post-card bg-white p-4 rounded-lg border border-gray-200 relative';
+                postElement.innerHTML = `
+                    <div class="prose prose-sm max-w-none">${post}</div>
+                    <button class="copy-btn absolute top-2 right-2 p-1 bg-gray-100 rounded-md hover:bg-gray-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                        </svg>
+                    </button>
+                `;
+                
+                postsContainer.appendChild(postElement);
+                
+                // Add copy functionality
+                const copyBtn = postElement.querySelector('.copy-btn');
+                copyBtn.addEventListener('click', () => {
+                    navigator.clipboard.writeText(post);
+                    
+                    // Show feedback
+                    const originalHTML = copyBtn.innerHTML;
+                    copyBtn.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                    `;
+                    
+                    setTimeout(() => {
+                        copyBtn.innerHTML = originalHTML;
+                    }, 2000);
+                });
+            });
+            
+            // Update counts
+            shownPostsCount.textContent = postsToShow;
+            totalPostsCount.textContent = userQuota.cachedPosts.length;
+            
+            // Show results section if hidden
+            resultsSection.classList.remove('hidden');
+            
+            // Show more posts section if they've used all their free posts
+            if (userQuota.remainingPosts <= 0 && userQuota.purchasedPosts <= 0) {
+                morePostsSection.classList.remove('hidden');
+            } else {
+                morePostsSection.classList.add('hidden');
+            }
+            
+            // Update remaining posts in UI
+            if (postsToShow > 0) {
+                // Deduct from purchased posts first
+                if (userQuota.purchasedPosts > 0) {
+                    const deductedFromPurchased = Math.min(postsToShow, userQuota.purchasedPosts);
+                    userQuota.purchasedPosts -= deductedFromPurchased;
+                    
+                    // Deduct remaining from free posts if needed
+                    const remainingToDeduct = postsToShow - deductedFromPurchased;
+                    if (remainingToDeduct > 0) {
+                        userQuota.remainingPosts -= remainingToDeduct;
+                    }
+                } else {
+                    userQuota.remainingPosts -= postsToShow;
+                }
+                
+                // Update in database
+                supabase
+                    .from('user_quotas')
+                    .update({ 
+                        remaining_posts: userQuota.remainingPosts,
+                        purchased_posts: userQuota.purchasedPosts
+                    })
+                    .eq('user_id', currentUser.id);
+                
+                updateQuotaUI();
+            }
+        }
+        
+        // Addon purchases
+        addon1Btn.addEventListener('click', async () => {
+            if (!currentUser) {
+                alert('Please sign in to purchase addons');
+                authModal.classList.remove('hidden');
+                return;
+            }
+            
+            // Check if user has already purchased max allowed (3)
+            if (userQuota.purchasedPosts >= 30) {
+                alert('You have reached the maximum allowed purchased posts (30). Please use a new input addon to generate more content.');
+                return;
+            }
+            
+            // Check if they have cached posts available
+            if (userQuota.cachedPosts.length <= (userQuota.remainingPosts + userQuota.purchasedPosts)) {
+                alert('No additional posts available from your current generation. Please submit a new description first.');
+                return;
+            }
+            
+            // Open Lemon Squeezy checkout
+window.location.href = 'https://postmint.lemonsqueezy.com/buy/e2a0292e-f6d2-4dcd-a3f4-aa19e0d4af2a?embed=1';
+
+         
+        });
+        
+        addon2Btn.addEventListener('click', async () => {
+            if (!currentUser) {
+                alert('Please sign in to purchase addons');
+                authModal.classList.remove('hidden');
+                return;
+            }
+            
+            // Check API limits
+            if (userQuota.apiCallsToday >= 100) {
+                alert('Daily API limit reached. Please try again tomorrow.');
+                return;
+            }
+            
+            // Open Lemon Squeezy checkout
+window.location.href = 'https://postmint.lemonsqueezy.com/buy/3a8bad82-ecaa-4cc1-81cc-52b51c3ef9dd?embed=1';
+        });
+        
+        // Testimonial modal
+        addTestimonialBtn.addEventListener('click', () => {
+            if (!currentUser) {
+                alert('Please sign in to submit a testimonial');
+                authModal.classList.remove('hidden');
+                return;
+            }
+            
+            testimonialModal.classList.remove('hidden');
+        });
+        
+        cancelTestimonialBtn.addEventListener('click', () => {
+            testimonialModal.classList.add('hidden');
+        });
+        
+        submitTestimonialBtn.addEventListener('click', async () => {
+            const name = document.getElementById('testimonial-name').value.trim();
+            const role = document.getElementById('testimonial-role').value.trim();
+            const text = document.getElementById('testimonial-text').value.trim();
+            
+            if (!name || !role || !text) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            try {
+                // In a real app, you would send this to your backend for moderation
+                // For this MVP, we'll just show an alert
+                alert('Thank you for your testimonial! We will review it and may add it to our site.');
+                
+                // You could also send it to your email or database
+                const { error } = await supabase
+                    .from('testimonials')
+                    .insert([
+                        { 
+                            user_id: currentUser.id,
+                            name,
+                            role,
+                            text,
+                            status: 'pending'
+                        }
+                    ]);
+                
+                if (error) throw error;
+                
+                testimonialModal.classList.add('hidden');
+                testimonialForm.reset();
+            } catch (error) {
+                console.error('Error submitting testimonial:', error.message);
+                alert('Error submitting testimonial. Please try again.');
+            }
+        });
+        
+        // Webhook handler for Lemon Squeezy purchases
+        async function handlePurchaseWebhook(data) {
+            // This would be called from your backend when Lemon Squeezy sends a webhook
+            // For now, we'll simulate it with a function you can call from your backend
+            
+            const userId = data.custom.user_id;
+            const addonType = data.custom.addon_type;
+            
+            try {
+                // Get current quota
+                const { data: quotaData, error: quotaError } = await supabase
+                    .from('user_quotas')
+                    .select('*')
+                    .eq('user_id', userId)
+                    .single();
+                
+                if (quotaError) throw quotaError;
+                
+                // Update based on addon type
+                let updates = {};
+                
+                if (addonType === 'more_posts') {
+                    updates.purchased_posts = (quotaData.purchased_posts || 0) + 10;
+                } else if (addonType === 'new_input') {
+                    updates.purchased_submits = (quotaData.purchased_submits || 0) + 1;
+                }
+                
+                const { error: updateError } = await supabase
+                    .from('user_quotas')
+                    .update(updates)
+                    .eq('user_id', userId);
+                
+                if (updateError) throw updateError;
+                
+                // Reload quota if this is the current user
+                if (currentUser && currentUser.id === userId) {
+                    await loadUserQuota();
+                }
+                
+                return { success: true };
+            } catch (error) {
+                console.error('Error processing purchase:', error.message);
+                return { success: false, error: error.message };
+            }
+        }
+        
+        
+        
+   
+ 
+
+  const overlay = document.getElementById('lock-overlay');
+  const generatorContent = document.getElementById('generator-content');
+
+//access check
+
+  async function checkAccessState() {
+    const { data: { session } } = await supabase.auth.getSession();
+
+    if (!session?.user) {
+      //  Not logged in
+      overlay.style.display = 'flex';
+      generatorContent.classList.add('opacity-1000', 'pointer-events-none');
+      overlay.innerHTML = `
+        <div class="text-center text-black">
+          <p class="text-lg font-semibold">Please sign in to use the generator</p>
+          <p class="text-sm mt-2">Create an account or log in to access your free posts.</p>
+        </div>
+        
+      `;
+      
+      return;
+    }
+    const userId = session.user.id;
+
+    const { data: quota, error } = await supabase
+      .from('user_quotas')
+      .select('remaining_posts, remaining_submits')
+      .eq('user_id', userId)
+      .single();
+
+    if (error || !quota) {
+      // Optional: fallback error
+      overlay.style.display = 'flex';
+      generatorContent.classList.add('opacity-30', 'pointer-events-none');
+      overlay.innerHTML = `
+        <div class="text-center text-red-600">
+          <p class="text-lg font-semibold">Error loading quota.</p>
+          <p class="text-sm mt-2">Please try refreshing the page.</p>
+        </div>
+      `;
+      return;
+    }
+
+    if (quota.remaining_posts > 0 || quota.remaining_submits > 0) {
+      // ✅ Logged in and has quota
+      overlay.style.display = 'none';
+      generatorContent.classList.remove('opacity-30', 'pointer-events-none');
+    } else {
+      // 🔒 Logged in but quota is over
+      overlay.style.display = 'flex';
+      generatorContent.classList.add('opacity-30', 'pointer-events-none');
+      overlay.innerHTML = `
+        <div class="text-center text-black">
+          <p class="text-lg font-semibold">Limit Reached</p>
+          <p class="text-sm mt-2">You've used all your free posts. Purchase an addon to continue.</p>
+        </div>
+      `;
+    }
+  }
+
+  // Run once on load
+  checkAccessState();
+
+  // Recheck on auth change
+  supabase.auth.onAuthStateChange((_event, _session) => {
+     if (event === 'SIGNED_IN') {
+                currentUser = session.user;
+                loadUserQuota();
+                updateUIAfterAuth();
+            } else if (event === 'SIGNED_OUT') {
+                currentUser = null;
+                updateUIAfterAuth();
+            }
+            
+        
+    checkAccessState();
+  });
+</script>
+<script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
+<script src="https://app.lemonsqueezy.com/js/lemon.js" defer></script>
+
+</body>
+</html>
