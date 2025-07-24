@@ -1,7 +1,8 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-const openRouterApiKey = Deno.env.get('OPENROUTER_API_KEY') || '';
+
+const openRouterApiKey = process.env.OPENROUTER_API_KEY || '';
 
 serve(async (req) => {
   try {
