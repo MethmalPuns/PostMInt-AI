@@ -7,11 +7,7 @@
     <title>PostMint AI | AI-Powered X Platform Post Generator</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <!--<script src="https://unpkg.com/@supabase/supabase-js@2"></script>-->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/dist/umd/supabase.min.js"></script>
-
-
-<!--<script src="https://js.lemonsqueezy.com/v1/lemon.js" defer></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/dist/umd/supabase.min.js"></script>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Megrim&display=swap');
@@ -653,15 +649,11 @@
         </div>
     </footer>
 
-<script type="module">
-     import { createClient } from 'https://esm.sh/@supabase/supabase-js'
-
-  
-const supabaseUrl = process.env.SUPABASE_URL;
-
-  const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
-
-  const supabase = createClient(supabaseUrl, supabaseKey);
+<script>
+        // Supabase configuration (Replace with your actual values)
+        const supabaseUrl = 'YOUR_SUPABASE_URL'; // Replace with your Supabase project URL
+        const supabaseAnonKey = 'YOUR_SUPABASE_ANON_KEY'; // Replace with your Supabase anon key
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
         
   // DOM Elements
         const authButtons = document.getElementById('auth-buttons');
@@ -842,7 +834,7 @@ const supabaseUrl = process.env.SUPABASE_URL;
                     
                     if (error) throw error;
                     
-                    currentUser = user;
+                    currentUser = data.user;
                     await loadUserQuota();
                     updateUIAfterAuth();
                     authModal.classList.add('hidden');
@@ -881,7 +873,7 @@ const supabaseUrl = process.env.SUPABASE_URL;
         
         // Check auth state on load
         async function checkAuthState() {
-            const { user, error } = await supabase.auth.getUser();
+            const { data: { user }, error } = await supabase.auth.getUser();
             
             if (user) {
                 currentUser = user;
@@ -1299,12 +1291,58 @@ window.location.href = 'https://postmint.lemonsqueezy.com/buy/3a8bad82-ecaa-4cc1
         }
         
         
+        // LemonSqueezy addon purchases
+        // Replace these URLs with your actual LemonSqueezy product checkout URLs
+        const addon1Url = 'https://your-store.lemonsqueezy.com/checkout/your-product-1?custom%5Buser_id%5D=';
+        const addon2Url = 'https://your-store.lemonsqueezy.com/checkout/your-product-2?custom%5Buser_id%5D=';
         
-   
- 
+        addon1Btn.addEventListener('click', () => {
+            if (!currentUser) {
+                alert('Please sign in to purchase addons');
+                authModal.classList.remove('hidden');
+                return;
+            }
+            
+            // Check if user has reached maximum addon purchases for this input
+            if (userQuota.purchasedPosts >= 30) {
+                alert('Maximum addon purchases reached (30 posts per input)');
+                return;
+            }
+            
+            // Open LemonSqueezy checkout with user ID in custom data
+            const checkoutUrl = `${addon1Url}${currentUser.id}&custom%5Baddon_type%5D=more_posts`;
+            window.open(checkoutUrl, '_blank');
+        });
+        
+        addon2Btn.addEventListener('click', () => {
+            if (!currentUser) {
+                alert('Please sign in to purchase addons');
+                authModal.classList.remove('hidden');
+                return;
+            }
+            
+            // Check API limit
+            if (userQuota.apiCallsToday >= 100) {
+                alert('Daily API limit reached. This addon will be available tomorrow.');
+                return;
+            }
+            
+            // Check if user has reached maximum addon purchases for this input
+            if (userQuota.purchasedSubmits >= 3) {
+                alert('Maximum addon purchases reached (3 new inputs per session)');
+                return;
+            }
+            
+            // Open LemonSqueezy checkout with user ID in custom data
+            const checkoutUrl = `${addon2Url}${currentUser.id}&custom%5Baddon_type%5D=new_input`;
+            window.open(checkoutUrl, '_blank');
+        });
 
-  const overlay = document.getElementById('lock-overlay');
-  const generatorContent = document.getElementById('generator-content');
+        // Initialize the app on load
+        checkAuthState();
+
+        const overlay = document.getElementById('lock-overlay');
+        const generatorContent = document.getElementById('generator-content');
 
 //access check
 
@@ -1367,7 +1405,7 @@ window.location.href = 'https://postmint.lemonsqueezy.com/buy/3a8bad82-ecaa-4cc1
   checkAccessState();
 
   // Recheck on auth change
-  supabase.auth.onAuthStateChange((_event, _session) => {
+  supabase.auth.onAuthStateChange((event, session) => {
      if (event === 'SIGNED_IN') {
                 currentUser = session.user;
                 loadUserQuota();
