@@ -1,8 +1,7 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-
-const lemonSqueezySecret = process.env.LEMON_SQUEEZY_SECRET || '';
+const lemonSqueezySecret = Deno.env.get('LEMON_SQUEEZY_SECRET') || '';
 
 async function verifySignature(payload: string, signature: string, secret: string): Promise<boolean> {
   const encoder = new TextEncoder()
