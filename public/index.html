@@ -832,7 +832,8 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js'
                                 api_calls_today: 0,
                                 last_api_call_date: new Date().toISOString().split('T')[0]
                             }
-                        ]);
+                        ],
+                    { onConflict: ['user_id'] });
                     
                     if (quotaError) throw quotaError;
                     
