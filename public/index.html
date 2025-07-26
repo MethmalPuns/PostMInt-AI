@@ -821,7 +821,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js'
                     // Initialize user quota in database
                     const {  error: quotaError } = await supabase
                         .from('user_quotas')
-                        .insert([
+                        .upsert([
                             { 
                                 user_id: user.id, 
                                 remaining_posts: 5, 
